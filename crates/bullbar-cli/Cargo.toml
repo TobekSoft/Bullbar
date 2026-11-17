@@ -1,0 +1,17 @@
+[package]
+name = "bullbar-cli"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish = false  # not for crates.io: a proof of concept (ADR 0022)
+
+
+[[bin]]
+name = "bullbar"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.104"
+bullbar-core = { version = "0.1.0", path = "../bullbar-core" }
+clap = { version = "4.6.7", features = ["derive"] }
+bullbar-gateway = { version = "0.1.0", path = "../bullbar-gateway" }

@@ -1,0 +1,11 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+route: provider-a at provider-no-training / top (with scrub, restore, topic pinning, personas, chaff, exposure ledger)
+1. rated sensitive by the classifier
+2. the health category is locked, so the classifier's sensitive stands
+3. sensitive requests may go as far as provider-no-training, once scrubbed
+4. hard work needs at least a top model
+5. cheapest allowed: provider-a at provider-no-training / top (cost 20)
+6. leaves the local layer rated sensitive, so: scrub, restore, topic pinning, personas, chaff, exposure ledger

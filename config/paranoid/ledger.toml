@@ -1,0 +1,7 @@
+# Paranoid edition: an account that has seen this many requests of a category is skipped for it.
+
+threshold = 10
+
+[seen.provider-a]
+legal = 12
+general = 4

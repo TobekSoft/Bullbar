@@ -1,0 +1,15 @@
+[package]
+name = "bullbar-core"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish = false  # not for crates.io: a proof of concept (ADR 0022)
+
+[dependencies]
+serde = { version = "1.0.229", features = ["derive"] }
+thiserror = "2.0.21"
+toml = "1.2.1"
+
+[dev-dependencies]
+insta = "1.49.0"
+proptest = "1.12.0"

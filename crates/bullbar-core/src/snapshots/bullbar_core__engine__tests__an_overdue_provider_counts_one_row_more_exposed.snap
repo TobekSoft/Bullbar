@@ -1,0 +1,10 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+route: provider-a at provider-standard / top
+1. rated public by you
+2. public requests may go as far as provider-standard
+3. hard work needs at least a top model
+4. provider-a was due for review on 2026-11-01, so it counts as provider-standard, not provider-no-training
+5. cheapest allowed: provider-a at provider-standard / top (cost 20)

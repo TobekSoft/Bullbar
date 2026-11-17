@@ -1,0 +1,83 @@
+# Every sensitivity × complexity, on the casual edition: local small and mid models (free), a free
+# relay (small), provider-a (no training: small 2, mid 5, top 20), provider-b (standard: 1, 3, 10).
+# Federation, the obfuscator and the exposure ledger are not installed.
+
+today = 2026-11-15
+
+[[scenario]]
+name = "easy public work stays home: free and least exposed"
+edition = "casual"
+request = { sensitivity = "public", complexity = "easy" }
+expect = { outcome = "route", account = "local", row = "local", column = "small", mechanisms = [] }
+
+[[scenario]]
+name = "medium public work uses the local mid model"
+edition = "casual"
+request = { sensitivity = "public", complexity = "medium" }
+expect = { outcome = "route", account = "local", row = "local", column = "mid" }
+
+[[scenario]]
+name = "hard public work goes to the cheapest top model, with the floor only"
+edition = "casual"
+request = { sensitivity = "public", complexity = "hard" }
+expect = { outcome = "route", account = "provider-b", row = "provider-standard", column = "top", mechanisms = [] }
+
+[[scenario]]
+name = "easy personal work stays home, unscrubbed: nothing leaves"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "easy" }
+expect = { outcome = "route", account = "local", column = "small", mechanisms = [] }
+
+[[scenario]]
+name = "medium personal work stays home"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "medium" }
+expect = { outcome = "route", account = "local", column = "mid" }
+
+[[scenario]]
+name = "hard personal work leaves scrubbed, no further than no-training terms"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "hard" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", column = "top", mechanisms = ["restore", "scrub", "topic-pinning"], reasons = ["once scrubbed"] }
+
+[[scenario]]
+name = "easy sensitive work stays home"
+edition = "casual"
+request = { sensitivity = "sensitive", complexity = "easy" }
+expect = { outcome = "route", account = "local", column = "small" }
+
+[[scenario]]
+name = "medium sensitive work stays home"
+edition = "casual"
+request = { sensitivity = "sensitive", complexity = "medium" }
+expect = { outcome = "route", account = "local", column = "mid" }
+
+[[scenario]]
+name = "hard sensitive work leaves scrubbed, and names the protections it can't have"
+edition = "casual"
+request = { sensitivity = "sensitive", complexity = "hard" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", column = "top", mechanisms = ["restore", "scrub", "topic-pinning"], reasons = ["no working obfuscator", "no working exposure ledger"] }
+
+[[scenario]]
+name = "easy secret work stays home"
+edition = "casual"
+request = { sensitivity = "secret", complexity = "easy" }
+expect = { outcome = "route", account = "local", column = "small", reasons = ["rated secret, so it stays on the local layer"] }
+
+[[scenario]]
+name = "medium secret work stays home"
+edition = "casual"
+request = { sensitivity = "secret", complexity = "medium" }
+expect = { outcome = "route", account = "local", column = "mid" }
+
+[[scenario]]
+name = "hard secret work asks to settle for the best local model"
+edition = "casual"
+request = { sensitivity = "secret", complexity = "hard" }
+expect = { outcome = "ask", question = "settle-local", account = "local", column = "mid", reasons = ["no account offers a top model or better within local"] }
+
+[[scenario]]
+name = "unrated work counts as sensitive"
+edition = "casual"
+request = { complexity = "medium" }
+expect = { outcome = "route", account = "local", column = "mid", reasons = ["not rated, so treated as sensitive"] }

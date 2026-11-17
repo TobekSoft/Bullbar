@@ -1,0 +1,13 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+route: relay-free at anonymous-relay / small (with scrub, restore, topic pinning, exposure ledger)
+1. rated sensitive by you
+2. no working local runner, so this sensitive request can only be answered outside, scrubbed
+3. sensitive requests may go as far as provider-no-training, once scrubbed
+4. easy work needs at least a small model
+5. cheapest allowed: relay-free at anonymous-relay / small (cost 0)
+6. no working local runner, so without: personas
+7. no working local runner to write chaff, so without: chaff (turn on canned chaff with chaff_without_local)
+8. leaves the local layer rated sensitive, so: scrub, restore, topic pinning, exposure ledger

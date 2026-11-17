@@ -1,0 +1,12 @@
+# Gateway-only edition: no local runner. The classifier is rules only on this hardware.
+
+installed = [
+    # Required
+    "decision-engine", "outbound-check", "shutters", "policy", "credential-scanner",
+    # Optional
+    "pii-scrubber", "classifier", "provider-adapters", "terms-register",
+]
+
+# What the scrubber can find: patterns (counts as none), entities or context (needs the local runner).
+# Entity recognition runs on a CPU; there is no local runner for context.
+pii_scrubber_grade = "entities"

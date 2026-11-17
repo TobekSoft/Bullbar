@@ -1,0 +1,13 @@
+# Paranoid edition: everything that protects is installed.
+
+installed = [
+    # Required
+    "decision-engine", "outbound-check", "shutters", "policy", "credential-scanner",
+    # Optional
+    "pii-scrubber", "classifier", "local-runner", "provider-adapters", "terms-register",
+    "exposure-ledger", "federation", "obfuscator", "deobfuscator", "canaries",
+    "answer-check",
+]
+
+# What the scrubber can find: patterns (counts as none), entities or context (needs the local runner).
+pii_scrubber_grade = "context"

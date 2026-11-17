@@ -1,0 +1,5 @@
+# Casual edition: credentials are replaced so the rest can leave, and poor answers escalate by
+# themselves.
+
+strip_and_send = true
+escalation = "auto"

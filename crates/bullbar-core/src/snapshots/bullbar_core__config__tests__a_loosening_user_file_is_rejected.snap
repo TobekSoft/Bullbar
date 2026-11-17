@@ -1,0 +1,5 @@
+---
+source: crates/bullbar-core/src/config.rs
+expression: e
+---
+user.toml: the user's ceiling for personal requests is provider-standard, more exposed than the admin's provider-no-training

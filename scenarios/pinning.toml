@@ -1,0 +1,43 @@
+# Topic pinning (ADR 0021): with the federation slot working, Personal and Sensitive work in a topic
+# goes only to the account the topic is pinned to; where that account can't take it, Bullbar asks
+# before moving the topic. Without federation: "one account per provider, no topic pinning".
+
+today = 2026-11-16
+
+[[scenario]]
+name = "a pinned topic's personal work goes to its account"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "hard", category = "health", pinned = "provider-a" }
+expect = { outcome = "route", account = "provider-a", mechanisms = ["restore", "scrub", "topic-pinning"], reasons = ["health topic is pinned to provider-a"] }
+
+[[scenario]]
+name = "a topic pinned to an account it may no longer reach asks before moving"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "hard", category = "health", pinned = "provider-b" }
+expect = { outcome = "ask", question = "move-pin", account = "provider-a", reasons = ["provider-b, which the health topic is pinned to, can't take this request"] }
+
+[[scenario]]
+name = "a topic pinned to an account no longer set up asks before moving"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "hard", category = "legal", pinned = "provider-z" }
+expect = { outcome = "ask", question = "move-pin", account = "provider-a" }
+
+[[scenario]]
+name = "a pinned topic's easy work stays home without asking"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "easy", category = "health", pinned = "provider-z" }
+expect = { outcome = "route", account = "local" }
+
+[[scenario]]
+name = "public work ignores pins"
+edition = "casual"
+request = { sensitivity = "public", complexity = "hard", category = "general", pinned = "provider-a" }
+expect = { outcome = "route", account = "provider-b", column = "top" }
+
+[[scenario]]
+name = "without federation, pins are ignored and the route says so"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "hard", category = "health", pinned = "provider-z" }
+slots = { empty = ["federation"] }
+expect = { outcome = "route", account = "provider-a", mechanisms = ["restore", "scrub"], reasons = ["without: topic pinning"] }
+

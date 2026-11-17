@@ -1,0 +1,33 @@
+# Casual edition: a local runner, a free relay and two providers.
+
+[accounts.local]
+row = "local"
+offers = { small = 0, mid = 0 }
+# Where the runner listens, and the model it runs for each column (names as your runner knows them).
+base_url = "http://127.0.0.1:11434/v1"
+models = { small = "local-small", mid = "local-mid" }
+
+[accounts.relay-free]
+row = "anonymous-relay"
+offers = { small = 0 }
+review_due = 2027-03-01
+# Where `serve` reaches it, and its model per column. The .example addresses are placeholders
+# (that domain never resolves). Accounts that need a key name a key_file, relative to this folder.
+base_url = "https://relay-free.example/v1"
+models = { small = "relay-free-small" }
+
+[accounts.provider-a]
+row = "provider-no-training"
+offers = { small = 2, mid = 5, top = 20 }
+review_due = 2027-01-15
+base_url = "https://provider-a.example/v1"
+models = { small = "provider-a-small", mid = "provider-a-mid", top = "provider-a-top" }
+key_file = "keys/provider-a.key"
+
+[accounts.provider-b]
+row = "provider-standard"
+offers = { small = 1, mid = 3, top = 10 }
+review_due = 2027-01-15
+base_url = "https://provider-b.example/v1"
+models = { small = "provider-b-small", mid = "provider-b-mid", top = "provider-b-top" }
+key_file = "keys/provider-b.key"

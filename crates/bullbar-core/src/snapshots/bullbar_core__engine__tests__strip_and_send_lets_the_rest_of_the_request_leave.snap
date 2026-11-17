@@ -1,0 +1,11 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+route: provider-b at provider-standard / top (with strip credentials)
+1. rated public by you
+2. public requests may go as far as provider-standard
+3. hard work needs at least a top model
+4. cheapest allowed: provider-b at provider-standard / top (cost 10)
+5. credentials will be replaced by placeholders before it leaves (strip-and-send)
+6. leaves the local layer rated public, so: strip credentials

@@ -1,0 +1,47 @@
+# Setups without a local model (ADR 0014): hardware tier 1, and local runners that are down.
+
+today = 2026-11-15
+
+[[scenario]]
+name = "on a gateway-only setup, sensitive work leaves scrubbed"
+edition = "gateway-only"
+request = { sensitivity = "sensitive", complexity = "medium" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", column = "mid", mechanisms = ["restore", "scrub"], reasons = ["can only be answered outside, scrubbed"] }
+
+[[scenario]]
+name = "on a gateway-only setup, unrated hard work leaves scrubbed"
+edition = "gateway-only"
+request = { complexity = "hard" }
+expect = { outcome = "route", account = "provider-a", column = "top", mechanisms = ["restore", "scrub"] }
+
+[[scenario]]
+name = "on a gateway-only setup, secret work is refused"
+edition = "gateway-only"
+request = { sensitivity = "secret", complexity = "easy" }
+expect = { outcome = "refuse" }
+
+[[scenario]]
+name = "on a gateway-only setup, easy public work goes to the free relay"
+edition = "gateway-only"
+request = { sensitivity = "public", complexity = "easy" }
+expect = { outcome = "route", account = "relay-free", row = "anonymous-relay", mechanisms = [] }
+
+[[scenario]]
+name = "on a gateway-only setup, personal work goes to the relay scrubbed"
+edition = "gateway-only"
+request = { sensitivity = "personal", complexity = "easy" }
+expect = { outcome = "route", account = "relay-free", mechanisms = ["restore", "scrub"] }
+
+[[scenario]]
+name = "a paranoid user's choice: with the local runner down, sensitive work is refused"
+edition = "paranoid"
+request = { sensitivity = "sensitive", complexity = "easy" }
+slots = { unhealthy = ["local-runner"] }
+expect = { outcome = "refuse", reasons = ["sensitive requests may not leave without one"] }
+
+[[scenario]]
+name = "a corporate admin's rule: with the local runner down, sensitive work is refused"
+edition = "corporate"
+request = { sensitivity = "sensitive", complexity = "easy" }
+slots = { empty = ["local-runner"] }
+expect = { outcome = "refuse", reasons = ["sensitive requests may not leave without one"] }

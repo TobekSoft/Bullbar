@@ -1,0 +1,17 @@
+# Paranoid edition: tight ceilings, and the classifier's rating always stands.
+
+strip_and_send_allowed = false
+lower_ratings_allowed = false
+
+[ceilings]
+public = "provider-no-training"
+personal = "anonymous-relay"
+sensitive = "local"
+
+[categories.health]
+ceiling = "local"
+locked = true
+
+[categories.finance]
+ceiling = "local"
+locked = true

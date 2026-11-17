@@ -1,0 +1,13 @@
+# Casual edition: the required five, plus scrubbing, classifying, a local runner, providers, and
+# topic pinning (federation; added 2026-11-16, ADR 0021).
+
+installed = [
+    # Required
+    "decision-engine", "outbound-check", "shutters", "policy", "credential-scanner",
+    # Optional
+    "pii-scrubber", "classifier", "local-runner", "provider-adapters", "terms-register",
+    "answer-check", "federation",
+]
+
+# What the scrubber can find: patterns (counts as none), entities or context (needs the local runner).
+pii_scrubber_grade = "context"

@@ -1,0 +1,554 @@
+# Synthetic messages for measuring what a PII scrubber finds (chunk 3, slice 0). Every person,
+# number and address here is invented: surnames that don't exist, phone numbers from the ranges set
+# aside for fiction (UK 07700 900xxx, US 555-01xx), emails at example domains, the IBAN registry's
+# own example. Town and company names are real or generic; they are not anyone's personal data.
+#
+# Each case is a message and the spans a scrubber should find, by kind and exact text (the first
+# occurrence, unless `nth` says otherwise; counting from 1). Kinds:
+#   person        a private person's name, whole or part ("Imogen", "Mr Quillsby")
+#   public        a public figure's name; scored apart (scrubbing it costs answer quality)
+#   place         a town, city, region or venue tied to the writer
+#   address       a street address or postcode
+#   organisation  an employer, school, clinic, club tied to the writer
+#   date          a specific calendar date (not "next week")
+#   email, phone  contact details
+#   id            account, IBAN, passport, patient, membership and similar numbers
+#   relationship  a phrase linking someone to the writer ("my wife", "our landlord")
+# Cases with no spans are clean: anything found there counts against precision.
+
+# --- People -------------------------------------------------------------------------------------
+
+[[case]]
+text = "Can you help me write a birthday message for Imogen Fakeworth? She's turning forty."
+spans = [{ kind = "person", text = "Imogen Fakeworth" }]
+
+[[case]]
+text = "My neighbour Dorian Quillsby keeps parking across my drive. How do I ask him politely to stop?"
+spans = [
+  { kind = "relationship", text = "My neighbour" },
+  { kind = "person", text = "Dorian Quillsby" },
+]
+
+[[case]]
+text = "Draft an email to Priya Venkatafake telling her the meeting moved to Thursday."
+spans = [{ kind = "person", text = "Priya Venkatafake" }]
+
+[[case]]
+text = "I had an argument with Tomasz about money again. How can we talk about budgets without fighting?"
+spans = [{ kind = "person", text = "Tomasz" }]
+
+[[case]]
+text = "Mr Hollowbeck from the bank called and said my overdraft limit was being cut."
+spans = [{ kind = "person", text = "Mr Hollowbeck" }]
+
+[[case]]
+text = "Summarise this: Dear Ms Larkfield, thank you for your application. We regret to inform you that the position has been filled. Kind regards, Owen Brackenmoor"
+spans = [
+  { kind = "person", text = "Ms Larkfield" },
+  { kind = "person", text = "Owen Brackenmoor" },
+]
+
+[[case]]
+text = "My daughter Elsie and her friend Marguerite Duvalfake want to start a podcast. What equipment do they need?"
+spans = [
+  { kind = "relationship", text = "My daughter" },
+  { kind = "person", text = "Elsie" },
+  { kind = "person", text = "Marguerite Duvalfake" },
+]
+
+[[case]]
+text = "Rewrite this to sound friendlier: Kwame, the report is late again and I need it by noon."
+spans = [{ kind = "person", text = "Kwame" }]
+
+[[case]]
+text = "Is it rude to call my mother-in-law by her first name, Rosalind?"
+spans = [
+  { kind = "relationship", text = "my mother-in-law" },
+  { kind = "person", text = "Rosalind" },
+]
+
+[[case]]
+text = "Fergus Ashdowne-Pike and I are getting married in June. Suggest some readings for the ceremony."
+spans = [{ kind = "person", text = "Fergus Ashdowne-Pike" }]
+
+[[case]]
+text = "Translate into Spanish: Please give the keys to Lucía Ortegafalsa when she arrives."
+spans = [{ kind = "person", text = "Lucía Ortegafalsa" }]
+
+[[case]]
+text = "how do i tell sam that i dont want to go to his party"
+spans = [{ kind = "person", text = "sam" }]
+
+[[case]]
+text = "My GP, Dr Nwachukfake, says my blood pressure is borderline. What lifestyle changes help?"
+spans = [
+  { kind = "relationship", text = "My GP" },
+  { kind = "person", text = "Dr Nwachukfake" },
+]
+
+[[case]]
+text = "Write a thank-you card for Aunt Philippa, who looked after the cats while we were away."
+spans = [
+  { kind = "relationship", text = "Aunt" },
+  { kind = "person", text = "Philippa" },
+]
+
+[[case]]
+text = "Chen Xiaofake and Bartholomew Glimmering both applied for the same job on my team. Help me compare their CVs fairly."
+spans = [
+  { kind = "person", text = "Chen Xiaofake" },
+  { kind = "person", text = "Bartholomew Glimmering" },
+  { kind = "relationship", text = "my team" },
+]
+
+[[case]]
+text = "Imogen said Imogen's car was the blue one, but Imogen drives a red one. Which is it?"
+spans = [
+  { kind = "person", text = "Imogen" },
+  { kind = "person", text = "Imogen", nth = 2 },
+  { kind = "person", text = "Imogen", nth = 3 },
+]
+
+[[case]]
+text = "My son Jago is being bullied at school. What should I say to his teacher, Mrs Pennyfeather?"
+spans = [
+  { kind = "relationship", text = "My son" },
+  { kind = "person", text = "Jago" },
+  { kind = "relationship", text = "his teacher" },
+  { kind = "person", text = "Mrs Pennyfeather" },
+]
+
+[[case]]
+text = "Proofread my cover letter. I'm Saoirse Mac Fakeagh and I've worked in logistics for ten years."
+spans = [{ kind = "person", text = "Saoirse Mac Fakeagh" }]
+
+# --- Public figures (scored apart) --------------------------------------------------------------
+
+[[case]]
+text = "What did Ada Lovelace contribute to computing?"
+spans = [{ kind = "public", text = "Ada Lovelace" }]
+
+[[case]]
+text = "Compare the economic policies of Margaret Thatcher and Clement Attlee."
+spans = [
+  { kind = "public", text = "Margaret Thatcher" },
+  { kind = "public", text = "Clement Attlee" },
+]
+
+[[case]]
+text = "Recommend three novels similar to those by Ursula K. Le Guin."
+spans = [{ kind = "public", text = "Ursula K. Le Guin" }]
+
+[[case]]
+text = "Was Isaac Newton really hit on the head by an apple?"
+spans = [{ kind = "public", text = "Isaac Newton" }]
+
+# --- Places and addresses -----------------------------------------------------------------------
+
+[[case]]
+text = "I live in Hebden Bridge and work in Leeds. Is it worth buying an electric car for the commute?"
+spans = [
+  { kind = "place", text = "Hebden Bridge" },
+  { kind = "place", text = "Leeds" },
+]
+
+[[case]]
+text = "Please send the parcel to 14 Fakeley Road, Didsbury, Manchester M20 9ZZ."
+spans = [
+  { kind = "address", text = "14 Fakeley Road" },
+  { kind = "place", text = "Didsbury" },
+  { kind = "place", text = "Manchester" },
+  { kind = "address", text = "M20 9ZZ" },
+]
+
+[[case]]
+text = "Our flat at 3B Gloamwick Court has damp in the bathroom. How do I report it to the council?"
+spans = [{ kind = "address", text = "3B Gloamwick Court" }]
+
+[[case]]
+text = "We're moving from Aberystwyth to Bristol next spring with two kids. Which areas have good primary schools?"
+spans = [
+  { kind = "place", text = "Aberystwyth" },
+  { kind = "place", text = "Bristol" },
+]
+
+[[case]]
+text = "My address is 221 Fakeholm Lane, Springfield, IL 62704. Is that inside the school district?"
+spans = [
+  { kind = "address", text = "221 Fakeholm Lane" },
+  { kind = "place", text = "Springfield" },
+  { kind = "address", text = "IL 62704" },
+]
+
+[[case]]
+text = "Write a complaint about the noise from the pub on Mardlebury Street, two doors from my house."
+spans = [{ kind = "address", text = "Mardlebury Street" }]
+
+[[case]]
+text = "I'm at the Royal Infirmary in Edinburgh visiting my dad. Where can I park overnight?"
+spans = [
+  { kind = "place", text = "Royal Infirmary" },
+  { kind = "place", text = "Edinburgh" },
+  { kind = "relationship", text = "my dad" },
+]
+
+[[case]]
+text = "Postcode for the delivery is EH99 1ZZ, flat 2."
+spans = [
+  { kind = "address", text = "EH99 1ZZ" },
+  { kind = "address", text = "flat 2" },
+]
+
+# --- Organisations ------------------------------------------------------------------------------
+
+[[case]]
+text = "I work at Brindlewick Logistics as a shift manager. Can my employer change my rota at a day's notice?"
+spans = [
+  { kind = "organisation", text = "Brindlewick Logistics" },
+  { kind = "relationship", text = "my employer" },
+]
+
+[[case]]
+text = "My son goes to St Fakewald's Primary and the head wants a meeting. What should I prepare?"
+spans = [
+  { kind = "relationship", text = "My son" },
+  { kind = "organisation", text = "St Fakewald's Primary" },
+]
+
+[[case]]
+text = "I've been a member of Gorsemoor Rowing Club for six years and want to stand for treasurer."
+spans = [{ kind = "organisation", text = "Gorsemoor Rowing Club" }]
+
+[[case]]
+text = "The Quarrystone Dental Practice charged me twice. How do I dispute it?"
+spans = [{ kind = "organisation", text = "Quarrystone Dental Practice" }]
+
+[[case]]
+text = "Help me write a resignation letter to Fenwright & Doyle Solicitors, where I've worked since 2019."
+spans = [{ kind = "organisation", text = "Fenwright & Doyle Solicitors" }]
+
+# --- Dates --------------------------------------------------------------------------------------
+
+[[case]]
+text = "I was born on 14 March 1987. How many days old am I?"
+spans = [{ kind = "date", text = "14 March 1987" }]
+
+[[case]]
+text = "My surgery is booked for 2026-12-03. What should I avoid eating the night before?"
+spans = [{ kind = "date", text = "2026-12-03" }]
+
+[[case]]
+text = "Our wedding anniversary is on the 22nd of August. Suggest a weekend away."
+spans = [{ kind = "date", text = "22nd of August" }]
+
+[[case]]
+text = "My passport expires 09/04/2027; can I still travel to Japan in February?"
+spans = [{ kind = "date", text = "09/04/2027" }]
+
+[[case]]
+text = "DOB: 1979-07-30. Fill in the rest of this form for me."
+spans = [{ kind = "date", text = "1979-07-30" }]
+
+# --- Contact details ----------------------------------------------------------------------------
+
+[[case]]
+text = "Reply to imogen.fakeworth@example.com and say I can do Tuesday."
+spans = [{ kind = "email", text = "imogen.fakeworth@example.com" }]
+
+[[case]]
+text = "Call me on 07700 900123 if the boiler engineer can't make it."
+spans = [{ kind = "phone", text = "07700 900123" }]
+
+[[case]]
+text = "My number is +44 7700 900456 and my wife's is +44 7700 900789."
+spans = [
+  { kind = "phone", text = "+44 7700 900456" },
+  { kind = "relationship", text = "my wife" },
+  { kind = "phone", text = "+44 7700 900789" },
+]
+
+[[case]]
+text = "Write an out-of-office: contact dorian.q@fakemail.example or (555) 555-0142 while I'm away."
+spans = [
+  { kind = "email", text = "dorian.q@fakemail.example" },
+  { kind = "phone", text = "(555) 555-0142" },
+]
+
+[[case]]
+text = "Format this contact card: Priya Venkatafake, priya.v@example.org, 555-0187, Brindlewick Logistics."
+spans = [
+  { kind = "person", text = "Priya Venkatafake" },
+  { kind = "email", text = "priya.v@example.org" },
+  { kind = "phone", text = "555-0187" },
+  { kind = "organisation", text = "Brindlewick Logistics" },
+]
+
+# --- Identifiers --------------------------------------------------------------------------------
+
+[[case]]
+text = "My IBAN is GB82 WEST 1234 5698 7654 32. Is that the right format for an international transfer?"
+spans = [{ kind = "id", text = "GB82 WEST 1234 5698 7654 32" }]
+
+[[case]]
+text = "My NHS number is 999 000 1234 and the clinic says it doesn't match. What do I do?"
+spans = [{ kind = "id", text = "999 000 1234" }]
+
+[[case]]
+text = "Passport number 999228775 was rejected by the airline's website. Why might that be?"
+spans = [{ kind = "id", text = "999228775" }]
+
+[[case]]
+text = "Account 00012345, sort code 00-00-00: write a letter cancelling my direct debit."
+spans = [
+  { kind = "id", text = "00012345" },
+  { kind = "id", text = "00-00-00" },
+]
+
+[[case]]
+text = "My national insurance number is QQ 12 34 56 C. Do I need it to register with a GP?"
+spans = [{ kind = "id", text = "QQ 12 34 56 C" }]
+
+[[case]]
+text = "Membership ID GRC-00417 lapsed. Write to the club asking to renew."
+spans = [{ kind = "id", text = "GRC-00417" }]
+
+# --- Relationships alone (context grade) --------------------------------------------------------
+
+[[case]]
+text = "My wife has lupus and is struggling with fatigue. What helps?"
+spans = [{ kind = "relationship", text = "My wife" }]
+
+[[case]]
+text = "My boss keeps messaging me at weekends. Is that legal in the UK?"
+spans = [{ kind = "relationship", text = "My boss" }]
+
+[[case]]
+text = "Our landlord won't fix the heating. What are our rights?"
+spans = [{ kind = "relationship", text = "Our landlord" }]
+
+[[case]]
+text = "My ex-husband missed child maintenance three months running. What can I do?"
+spans = [{ kind = "relationship", text = "My ex-husband" }]
+
+[[case]]
+text = "my brother owes me 800 pounds and keeps avoiding the subject"
+spans = [{ kind = "relationship", text = "my brother" }]
+
+[[case]]
+text = "I think my teenage daughter is self-harming. How do I start that conversation?"
+spans = [{ kind = "relationship", text = "my teenage daughter" }]
+
+# --- Mixed, longer ------------------------------------------------------------------------------
+
+[[case]]
+text = """Help me reply to this email:
+
+Hi Fergus,
+Just a reminder that the rent for 7 Hollin Mews (£950) is due on 1 December 2026. Please pay into account 00098765.
+Thanks,
+Wendolyn Starkfake
+Property Manager, Kettlewell Lettings
+07700 900321"""
+spans = [
+  { kind = "person", text = "Fergus" },
+  { kind = "address", text = "7 Hollin Mews" },
+  { kind = "date", text = "1 December 2026" },
+  { kind = "id", text = "00098765" },
+  { kind = "person", text = "Wendolyn Starkfake" },
+  { kind = "organisation", text = "Kettlewell Lettings" },
+  { kind = "phone", text = "07700 900321" },
+]
+
+[[case]]
+text = "Summarise the meeting: Priya and Kwame agreed to ship on 2026-12-10; Dorian objected; Tomasz will tell the client, Fenwright & Doyle Solicitors."
+spans = [
+  { kind = "person", text = "Priya" },
+  { kind = "person", text = "Kwame" },
+  { kind = "date", text = "2026-12-10" },
+  { kind = "person", text = "Dorian" },
+  { kind = "person", text = "Tomasz" },
+  { kind = "organisation", text = "Fenwright & Doyle Solicitors" },
+]
+
+[[case]]
+text = "I'm Bartholomew Glimmering, born 02/11/1990, living at 14 Fakeley Road. Fill in this tenancy reference."
+spans = [
+  { kind = "person", text = "Bartholomew Glimmering" },
+  { kind = "date", text = "02/11/1990" },
+  { kind = "address", text = "14 Fakeley Road" },
+]
+
+[[case]]
+text = "Write a toast for my sister Wren's wedding to Ambrose Tealfake at Gorsemoor Hall in Harrogate."
+spans = [
+  { kind = "relationship", text = "my sister" },
+  { kind = "person", text = "Wren" },
+  { kind = "person", text = "Ambrose Tealfake" },
+  { kind = "place", text = "Gorsemoor Hall" },
+  { kind = "place", text = "Harrogate" },
+]
+
+[[case]]
+text = "Patient: Rosalind Fakebury, hospital no. RIE-4471902, admitted 2026-10-28 with chest pain. Explain the discharge letter in plain English."
+spans = [
+  { kind = "person", text = "Rosalind Fakebury" },
+  { kind = "id", text = "RIE-4471902" },
+  { kind = "date", text = "2026-10-28" },
+]
+
+# --- Clean: nothing to find ---------------------------------------------------------------------
+
+# Part of a chat client's system prompt: the model tagged "professional tool caller" as a person, and
+# its words were then replaced everywhere as name parts (chunk 3's hand check; fixed 2026-11-17).
+[[case]]
+text = """2. Mandatory logical analysis:
+   - Before engaging any tools, articulate your complete thought process in natural language. You must act as a "professional tool caller," demonstrating rigorous logic.
+   - Analyze the information gap: explicitly state what data is missing."""
+spans = []
+
+[[case]]
+text = "Convert 5 miles to kilometres."
+spans = []
+
+[[case]]
+text = "Give me a recipe for apple crumble that doesn't use oats."
+spans = []
+
+[[case]]
+text = "May I ask how photosynthesis works in plain terms?"
+spans = []
+
+[[case]]
+text = "What's the difference between a Roth IRA and a traditional IRA?"
+spans = []
+
+[[case]]
+text = "Explain how the Rust borrow checker handles mutable references."
+spans = []
+
+[[case]]
+text = "Write a haiku about autumn rain."
+spans = []
+
+[[case]]
+text = "Why is the sky blue?"
+spans = []
+
+[[case]]
+text = "List the planets in order from the Sun."
+spans = []
+
+[[case]]
+text = "How do I unblock a kitchen sink without chemicals?"
+spans = []
+
+[[case]]
+text = "Summer in the Mediterranean: what should I pack for a two-week sailing trip?"
+spans = []
+
+[[case]]
+text = "Is it safe to eat eggs a week past their best-before date?"
+spans = []
+
+[[case]]
+text = "Translate 'good morning, how are you?' into German."
+spans = []
+
+[[case]]
+text = "Explain the Pythagorean theorem with an example."
+spans = []
+
+[[case]]
+text = "What is the capital of Australia?"
+spans = []
+
+[[case]]
+text = "Suggest a name for a black kitten."
+spans = []
+
+[[case]]
+text = "How long should I boil a 6-minute egg at altitude?"
+spans = []
+
+[[case]]
+text = "Compare SQLite and PostgreSQL for a small web app."
+spans = []
+
+[[case]]
+text = "What does 'Will do' mean in a work email?"
+spans = []
+
+[[case]]
+text = "How do April showers affect spring planting?"
+spans = []
+
+[[case]]
+text = "Rank the Lord of the Rings films by running time."
+spans = []
+
+[[case]]
+text = "Write a SQL query that counts orders per customer per month."
+spans = []
+
+[[case]]
+text = "Why do cats knead blankets?"
+spans = []
+
+[[case]]
+text = "What are the symptoms of iron deficiency?"
+spans = []
+
+[[case]]
+text = "Explain compound interest using £1,000 at 5% over 10 years."
+spans = []
+
+[[case]]
+text = "Is Mars bigger than Mercury?"
+spans = []
+
+[[case]]
+text = "How do I fix 'error: linker cc not found' when building Rust on Linux?"
+spans = []
+
+[[case]]
+text = "Give me five dinner ideas using chickpeas."
+spans = []
+
+[[case]]
+text = "When did the Berlin Wall fall?"
+spans = []
+
+[[case]]
+text = "Help me understand the rules of cricket."
+spans = []
+
+[[case]]
+text = "What's a good stretching routine for lower back pain?"
+spans = []
+
+# System prompts name the chat roles; the model tags "user" and "assistant" as people (chunk 3 hand
+# check, 2026-11-16).
+[[case]]
+text = "You are a helpful assistant. Answer the user's questions clearly; the user prefers short replies."
+spans = []
+
+# A chat client's title request: the whole conversation copied into one message. In the chunk 3 hand
+# check the model found only the street here, everywhere, so the town left in the clear (a finder
+# miss, rule 7). The street and the town are labelled apart, so finding only the street shows.
+[[case]]
+text = """Summarize the following conversation into a concise title of at most 10 words. Output the title only.
+
+Conversation:
+User: I'm writing a birthday card for my neighbour Imogen Fakeworth at 12 Fakery Lane, Tobermory. Suggest a short greeting that uses her full name and street.
+
+Assistant: Happy Birthday, Imogen Fakeworth, 12 Fakery Lane, Tobermory!
+
+User: What street did I say she lives on?"""
+spans = [
+  { kind = "person", text = "Imogen Fakeworth" },
+  { kind = "address", text = "12 Fakery Lane" },
+  { kind = "place", text = "Tobermory" },
+  { kind = "person", text = "Imogen Fakeworth", nth = 2 },
+  { kind = "address", text = "12 Fakery Lane", nth = 2 },
+  { kind = "place", text = "Tobermory", nth = 2 },
+]

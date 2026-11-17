@@ -1,0 +1,56 @@
+# Review dates (unreviewed changes demote, never promote) and the exposure ledger stub.
+
+today = 2026-11-15
+
+[[scenario]]
+name = "a reviewed provider keeps its row"
+edition = "gateway-only"
+request = { sensitivity = "personal", complexity = "medium" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", column = "mid" }
+
+[[scenario]]
+name = "on the review date itself, a provider keeps its row"
+edition = "gateway-only"
+today = 2027-01-15
+request = { sensitivity = "personal", complexity = "medium" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", column = "mid" }
+
+[[scenario]]
+name = "past its review date, a provider counts one row more exposed"
+edition = "gateway-only"
+today = 2027-01-16
+request = { sensitivity = "personal", complexity = "medium" }
+expect = { outcome = "refuse", reasons = ["no account offers a mid model or better within provider-no-training"] }
+
+[[scenario]]
+name = "an overdue review shrinks what corporate staff can use"
+edition = "corporate"
+today = 2027-07-01
+request = { sensitivity = "public", complexity = "hard" }
+expect = { outcome = "ask", question = "settle-local", account = "local", column = "mid" }
+
+[[scenario]]
+name = "before its review date, corporate's provider is in use"
+edition = "corporate"
+today = 2027-06-30
+request = { sensitivity = "public", complexity = "hard" }
+expect = { outcome = "route", account = "provider-a", column = "top" }
+
+[[scenario]]
+name = "the ledger skips a provider that has seen enough of a category"
+edition = "paranoid"
+request = { sensitivity = "public", complexity = "hard", category = "legal" }
+expect = { outcome = "route", account = "local", column = "top", reasons = ["provider-a skipped: it has already seen 12 legal requests"] }
+
+[[scenario]]
+name = "below the threshold, the ledger skips nothing"
+edition = "paranoid"
+request = { sensitivity = "public", complexity = "hard", category = "general" }
+expect = { outcome = "route", account = "local", reasons_absent = ["skipped"] }
+
+[[scenario]]
+name = "without a working ledger slot, the ledger skips nothing"
+edition = "paranoid"
+request = { sensitivity = "public", complexity = "hard", category = "legal" }
+slots = { empty = ["exposure-ledger"] }
+expect = { outcome = "route", account = "local", reasons_absent = ["skipped"] }

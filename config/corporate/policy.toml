@@ -1,0 +1,31 @@
+# Corporate edition: set by the admin. Staff can tighten, never loosen; no exceptions.
+
+strip_and_send_allowed = false
+exceptions_allowed = false
+lower_ratings_allowed = false
+# If the local runner is down, sensitive work waits rather than leaving (ADR 0014).
+send_sensitive_without_local_allowed = false
+# No trace of what left (ADR 0018 amendment): request content is never written to disk here.
+trace_allowed = false
+
+[ceilings]
+public = "provider-no-training"
+personal = "provider-no-training"
+sensitive = "local"
+
+[categories.health]
+ceiling = "local"
+locked = true
+
+[categories.legal]
+ceiling = "local"
+locked = true
+
+[categories.finance]
+ceiling = "provider-no-training"
+locked = true
+
+# A category of the organisation's own.
+[categories.client-work]
+ceiling = "local"
+locked = true

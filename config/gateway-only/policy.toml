@@ -1,0 +1,4 @@
+# Gateway-only edition: the defaults. Sensitive requests leave scrubbed, since there is no local
+# model to keep them home (ADR 0014); Secret ones and credentials are refused.
+
+send_sensitive_without_local_allowed = true

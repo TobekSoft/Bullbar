@@ -1,0 +1,95 @@
+# Admin, user and request (ADR 0012), ratings below the classifier, and one-off exceptions
+# (ADR 0011), across the editions.
+
+today = 2026-11-15
+
+[[scenario]]
+name = "rating below the classifier asks first"
+edition = "casual"
+request = { classifier = "sensitive", sensitivity = "public", complexity = "medium" }
+expect = { outcome = "ask", question = "confirm-lower-rating" }
+
+[[scenario]]
+name = "a confirmed lower rating is used"
+edition = "casual"
+request = { classifier = "sensitive", sensitivity = "public", complexity = "hard" }
+attempt = { confirm_lower = true }
+expect = { outcome = "route", account = "provider-b", row = "provider-standard", reasons = ["you confirmed rating it below the classifier's sensitive"] }
+
+[[scenario]]
+name = "rating above the classifier needs no confirmation"
+edition = "casual"
+request = { classifier = "public", sensitivity = "sensitive", complexity = "hard" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", reasons = ["rated sensitive by you"] }
+
+[[scenario]]
+name = "where the admin forbids lowering, the classifier's rating stands"
+edition = "corporate"
+request = { classifier = "sensitive", sensitivity = "public", complexity = "hard" }
+attempt = { confirm_lower = true }
+expect = { outcome = "ask", question = "settle-local", reasons = ["rating below the classifier isn't allowed, so its sensitive stands"] }
+
+[[scenario]]
+name = "in a locked category, the classifier's rating stands"
+edition = "paranoid"
+request = { classifier = "personal", sensitivity = "public", complexity = "easy", category = "health" }
+attempt = { confirm_lower = true }
+expect = { outcome = "route", account = "local", reasons = ["the health category is locked, so the classifier's personal stands"] }
+
+[[scenario]]
+name = "a category ceiling tightens the rating's"
+edition = "casual"
+request = { sensitivity = "public", complexity = "hard", category = "health" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", reasons = ["health requests may go no further than provider-no-training"] }
+
+[[scenario]]
+name = "an organisation's own category can keep everything home"
+edition = "corporate"
+request = { sensitivity = "public", complexity = "hard", category = "client-work" }
+expect = { outcome = "ask", question = "settle-local", account = "local", column = "mid", reasons = ["client-work requests may go no further than local"] }
+
+[[scenario]]
+name = "a locked category still allows what its ceiling allows"
+edition = "corporate"
+request = { sensitivity = "personal", complexity = "hard", category = "finance" }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", column = "top", mechanisms = ["restore", "scrub"] }
+
+[[scenario]]
+name = "a request can keep itself local"
+edition = "casual"
+request = { sensitivity = "public", complexity = "hard", row_limit = "local" }
+expect = { outcome = "ask", question = "settle-local", reasons = ["this request is limited to local"] }
+
+[[scenario]]
+name = "a request can ask for a more capable model"
+edition = "casual"
+request = { sensitivity = "public", complexity = "easy", want = "top" }
+expect = { outcome = "route", account = "provider-b", column = "top", reasons = ["you asked for at least a top model"] }
+
+[[scenario]]
+name = "where the admin forbids exceptions, a rung changes nothing"
+edition = "corporate"
+request = { sensitivity = "personal", complexity = "hard" }
+attempt = { rungs = 1 }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", reasons = ["one-off exceptions aren't allowed here"] }
+
+[[scenario]]
+name = "an exception stops at the admin's limit"
+edition = "paranoid"
+request = { sensitivity = "personal", complexity = "hard" }
+attempt = { rungs = 1 }
+expect = { outcome = "route", account = "local", column = "top", reasons = ["the admin's limit is anonymous-relay, so the exception stops there"] }
+
+[[scenario]]
+name = "a locked category takes no exception"
+edition = "paranoid"
+request = { sensitivity = "public", complexity = "easy", category = "health" }
+attempt = { rungs = 1 }
+expect = { outcome = "route", account = "local", reasons = ["the health category is locked, so no one-off exception"] }
+
+[[scenario]]
+name = "no exception moves secret content"
+edition = "casual"
+request = { sensitivity = "secret", complexity = "easy" }
+attempt = { rungs = 2 }
+expect = { outcome = "route", account = "local", reasons = ["no one-off exception moves secret content or credentials"] }

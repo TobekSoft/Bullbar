@@ -1,0 +1,8 @@
+/target
+/TODO.md
+/config/*/keys/
+/container/local/
+# Key files anywhere, not only in keys/ folders: one saved a folder too high stays out of git.
+*.key
+# The entity model (scripts/fetch-pii-model.sh): 1.2 GB, fetched, never committed.
+/models/

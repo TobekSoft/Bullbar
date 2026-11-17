@@ -1,0 +1,25 @@
+# Scrubbing in the containers (ADR 0020): Bullbar loads the PII scrubber's entity model, so Personal
+# work can leave scrubbed. Added on top of compose.yaml, not on its own:
+#
+#   scripts/fetch-pii-model.sh                     # once, on the host: about 1.2 GB, hash-checked
+#   podman compose -f compose.yaml -f compose.scrub.yaml up -d
+#
+# The model is fetched on the host and mounted read-only, not pulled into a volume by a service as
+# Ollama's models are: fetching needs curl and a hash check, which the host has and the images
+# don't. Another folder: BULLBAR_PII_MODEL=<path> (a path on the host).
+# Without this file Bullbar runs without the model, says so at start, and keeps Personal work local.
+
+services:
+  bullbar:
+    volumes:
+      - ${BULLBAR_PII_MODEL:-./models/gliner_multi_pii-v1}:/models/pii:ro
+    command:
+      - serve
+      - --config
+      - /config
+      - --listen
+      - 0.0.0.0:8480
+      - --control
+      - 0.0.0.0:8481
+      - --pii-model
+      - /models/pii

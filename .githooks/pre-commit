@@ -1,0 +1,14 @@
+#!/bin/sh
+# Blocks a commit that is unformatted, has clippy warnings or failing tests (ADR 0006).
+# Each block is logged to .git/hook-blocks.log, to judge on 2026-12-15 whether the hook earns its keep.
+# Enable once per clone: git config core.hooksPath .githooks
+
+log_block() {
+    echo "$(date -Iseconds) blocked by: $1" >> "$(git rev-parse --git-dir)/hook-blocks.log"
+    echo "pre-commit: blocked by $1" >&2
+    exit 1
+}
+
+cargo fmt --all --check || log_block "cargo fmt"
+cargo clippy --all-targets -- -D warnings || log_block "cargo clippy"
+cargo nextest run || log_block "cargo nextest"

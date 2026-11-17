@@ -1,0 +1,76 @@
+# Bullbar and a local runner (Ollama), for Podman (`podman compose`). Two networks:
+#   inner: Bullbar and the runner only, with no way out (concept design: the runner can't reach the
+#          network). Only Bullbar reaches the runner.
+#   outer: Bullbar's way to cloud accounts and to the host.
+# Both containers run non-root, read-only, with no capabilities. Ports are published to the host's
+# loopback only. The state folder (tokens, shutter) is the host's, so `bullbar` on the host and the
+# token files work as without containers.
+#
+# Models are pulled by the `models` service, on a network that can reach out (README, "Try it").
+
+name: bullbar
+
+services:
+  bullbar:
+    build:
+      context: .
+      dockerfile: Containerfile
+    image: localhost/bullbar:dev
+    depends_on: [ollama]
+    networks: [inner, outer]
+    ports:
+      - "127.0.0.1:8480:8480"   # chat
+      - "127.0.0.1:8481:8481"   # control
+    volumes:
+      - ./config/casual:/config:ro
+      # Your own accounts go in a copy outside git: BULLBAR_PROVIDERS=container/local/providers.toml
+      # (a path inside this folder, without a leading ./)
+      - ./${BULLBAR_PROVIDERS:-container/providers.toml}:/config/providers.toml:ro
+      - ${XDG_STATE_HOME:-${HOME}/.local/state}/bullbar:/state/bullbar
+    # The host user is the container's user 65532, so the state files stay the user's own.
+    userns_mode: keep-id:uid=65532,gid=65532
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges]
+    restart: unless-stopped
+
+  ollama:
+    image: docker.io/ollama/ollama:0.40.16@sha256:910d0d8107b538fb0894e63163eb195de0cc7aefcbc666dc62d3b18f71124592
+    networks: [inner]
+    user: "65532:65532"
+    environment:
+      HOME: /ollama
+      OLLAMA_MODELS: /ollama/models
+    volumes:
+      - models:/ollama
+    tmpfs: [/tmp]
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges]
+    restart: unless-stopped
+
+  # Ollama's own command line on the models volume, with a way out, for pulling and naming models.
+  # Started only when asked for:
+  #   podman compose run --rm models pull <model>
+  #   podman compose run --rm models cp <model> local-small
+  models:
+    image: docker.io/ollama/ollama:0.40.16@sha256:910d0d8107b538fb0894e63163eb195de0cc7aefcbc666dc62d3b18f71124592
+    profiles: [models]
+    networks: [outer]
+    user: "65532:65532"
+    environment:
+      HOME: /ollama
+      OLLAMA_MODELS: /ollama/models
+    volumes:
+      - models:/ollama
+    entrypoint: ["/bin/sh", "-c", "ollama serve >/dev/null 2>&1 & sleep 2; exec ollama \"$$@\"", "ollama"]
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges]
+
+networks:
+  inner:
+    internal: true
+  outer: {}
+
+volumes:
+  models: {}

@@ -1,0 +1,9 @@
+---
+source: crates/bullbar-core/src/config.rs
+expression: e
+---
+providers.toml: TOML parse error at line 2, column 7
+  |
+2 | row = "cloud"
+  |       ^^^^^^^
+unknown row `cloud`; expected one of: local, anonymous-relay, provider-no-training, provider-standard

@@ -1,0 +1,26 @@
+# Casual edition: the defaults, spelled out. Secret always stays local, whatever is set here.
+
+max_column = "top"
+strip_and_send_allowed = true
+exceptions_allowed = true
+lower_ratings_allowed = true
+# The complexity of a request whose model name doesn't say (`bullbar` rather than `bullbar/hard`).
+default_complexity = "medium"
+# With no local model, users may let sensitive requests leave scrubbed (ADR 0014).
+send_sensitive_without_local_allowed = true
+
+# The most exposed row each rating may reach (scrubbed, for personal and sensitive).
+[ceilings]
+public = "provider-standard"
+personal = "provider-no-training"
+sensitive = "provider-no-training"
+
+# The least capable column each complexity needs.
+[minimum_columns]
+easy = "small"
+medium = "mid"
+hard = "top"
+
+# Per-category ceilings; `locked = true` stops the user loosening them or taking exceptions.
+[categories.health]
+ceiling = "provider-no-training"

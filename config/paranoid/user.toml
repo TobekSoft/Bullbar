@@ -1,0 +1,6 @@
+# Paranoid edition: ask before every escalation.
+
+escalation = "ask"
+
+# If the local runner is down, refuse sensitive requests rather than send them out scrubbed.
+send_sensitive_without_local = false

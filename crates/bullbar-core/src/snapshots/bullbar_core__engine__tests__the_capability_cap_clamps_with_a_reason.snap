@@ -1,0 +1,10 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+route: local at local / mid
+1. rated public by you
+2. public requests may go as far as provider-standard
+3. hard work needs at least a top model
+4. the work wants a top model, but the cap is mid
+5. cheapest allowed: local at local / mid (cost 0)

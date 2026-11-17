@@ -1,0 +1,6 @@
+# What the image build never sees (read by Podman and Docker alike). The Containerfile copies only
+# Cargo.toml, Cargo.lock and crates/; this keeps the rest, keys above all, out of the build context.
+*
+!Cargo.toml
+!Cargo.lock
+!crates/

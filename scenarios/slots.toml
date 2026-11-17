@@ -1,0 +1,95 @@
+# Each missing slot, on the casual edition with one slot emptied or broken. An empty optional slot
+# never loosens anything (ADR 0002); a missing required slot stops the engine.
+
+today = 2026-11-15
+
+[[scenario]]
+name = "without a scrubber, personal work can't leave"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "hard" }
+slots = { empty = ["pii-scrubber"] }
+expect = { outcome = "ask", question = "settle-local", account = "local", column = "mid", reasons = ["no working PII scrubber"] }
+
+[[scenario]]
+name = "without a scrubber, public work still leaves"
+edition = "casual"
+request = { sensitivity = "public", complexity = "hard" }
+slots = { empty = ["pii-scrubber"] }
+expect = { outcome = "route", account = "provider-b", column = "top" }
+
+[[scenario]]
+name = "a broken scrubber counts as none"
+edition = "casual"
+request = { sensitivity = "sensitive", complexity = "hard" }
+slots = { unhealthy = ["pii-scrubber"] }
+expect = { outcome = "ask", question = "settle-local", reasons = ["no working PII scrubber"] }
+
+[[scenario]]
+name = "without a local runner, easy public work goes to the free relay"
+edition = "casual"
+request = { sensitivity = "public", complexity = "easy" }
+slots = { empty = ["local-runner"] }
+expect = { outcome = "route", account = "relay-free", row = "anonymous-relay", column = "small", mechanisms = [] }
+
+[[scenario]]
+name = "without a local runner, sensitive work leaves scrubbed (ADR 0014)"
+edition = "casual"
+request = { sensitivity = "sensitive", complexity = "easy" }
+slots = { empty = ["local-runner"] }
+expect = { outcome = "route", account = "relay-free", mechanisms = ["restore", "scrub", "topic-pinning"], reasons = ["can only be answered outside, scrubbed"] }
+
+[[scenario]]
+name = "without a local runner, secret work is refused"
+edition = "casual"
+request = { sensitivity = "secret", complexity = "easy" }
+slots = { empty = ["local-runner"] }
+expect = { outcome = "refuse", reasons = ["no local model to settle for"] }
+
+[[scenario]]
+name = "without provider adapters, nothing leaves"
+edition = "casual"
+request = { sensitivity = "public", complexity = "hard" }
+slots = { empty = ["provider-adapters"] }
+expect = { outcome = "ask", question = "settle-local", account = "local", column = "mid", reasons = ["no working provider adapters"] }
+
+[[scenario]]
+name = "without a terms register, no-training terms are unearned"
+edition = "casual"
+request = { sensitivity = "personal", complexity = "hard" }
+slots = { empty = ["terms-register"] }
+expect = { outcome = "ask", question = "settle-local", reasons = ["every provider counts as standard terms"] }
+
+[[scenario]]
+name = "without a terms register, public work still finds a top model"
+edition = "casual"
+request = { sensitivity = "public", complexity = "hard" }
+slots = { empty = ["terms-register"] }
+expect = { outcome = "route", account = "provider-b", row = "provider-standard", column = "top" }
+
+[[scenario]]
+name = "a broken classifier's rating still counts: ignoring it could only loosen"
+edition = "casual"
+request = { classifier = "secret", complexity = "easy" }
+slots = { unhealthy = ["classifier"] }
+expect = { outcome = "route", account = "local", reasons = ["rated secret by the classifier"] }
+
+[[scenario]]
+name = "without a classifier, unrated work counts as sensitive"
+edition = "casual"
+request = { complexity = "hard" }
+slots = { empty = ["classifier"] }
+expect = { outcome = "route", account = "provider-a", row = "provider-no-training", reasons = ["not rated, so treated as sensitive"] }
+
+[[scenario]]
+name = "without shutters, Bullbar won't start"
+edition = "casual"
+request = { sensitivity = "public", complexity = "easy" }
+slots = { empty = ["shutters"] }
+expect = { outcome = "no-start" }
+
+[[scenario]]
+name = "with a broken credential scanner, Bullbar won't start"
+edition = "casual"
+request = { sensitivity = "public", complexity = "easy" }
+slots = { unhealthy = ["credential-scanner"] }
+expect = { outcome = "no-start" }

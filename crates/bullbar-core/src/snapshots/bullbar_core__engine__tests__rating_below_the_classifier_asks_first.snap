@@ -1,0 +1,7 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+ask: The classifier rated this sensitive; you rated it public. Send it as public?
+1. rated sensitive by the classifier
+2. rating below the classifier needs your confirmation

@@ -1,0 +1,10 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+route: provider-a at provider-no-training / top (with scrub, restore, topic pinning)
+1. rated personal by you
+2. personal requests may go as far as provider-no-training, once scrubbed
+3. hard work needs at least a top model
+4. cheapest allowed: provider-a at provider-no-training / top (cost 20)
+5. leaves the local layer rated personal, so: scrub, restore, topic pinning

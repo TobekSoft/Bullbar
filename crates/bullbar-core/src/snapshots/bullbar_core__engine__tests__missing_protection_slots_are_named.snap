@@ -1,0 +1,12 @@
+---
+source: crates/bullbar-core/src/engine.rs
+expression: render(&d)
+---
+route: provider-a at provider-no-training / top (with scrub, restore, exposure ledger)
+1. rated sensitive by you
+2. sensitive requests may go as far as provider-no-training, once scrubbed
+3. hard work needs at least a top model
+4. cheapest allowed: provider-a at provider-no-training / top (cost 20)
+5. no working federation, so without: topic pinning
+6. no working obfuscator, so without: personas, chaff
+7. leaves the local layer rated sensitive, so: scrub, restore, exposure ledger

@@ -1,0 +1,27 @@
+[package]
+name = "bullbar-gateway"
+version = "0.1.0"
+edition.workspace = true
+license.workspace = true
+publish = false  # not for crates.io: a proof of concept (ADR 0022)
+description = "Bullbar's endpoint: real requests through the decision engine (ADR 0017)."
+
+[dependencies]
+async-openai = { version = "0.43.0", features = ["chat-completion", "byot"] }
+axum = "0.8.9"
+bullbar-core = { version = "0.1.0", path = "../bullbar-core" }
+futures-util = { version = "0.3.34", default-features = false, features = ["std"] }
+getrandom = "0.4.3"
+gline-rs = "=1.1.0"
+orp = "=1.0.0"
+regex = "1.13.1"
+reqwest = "0.13.5"
+serde_json = "1.0.154"
+thiserror = "2.0.21"
+tokio = { version = "1.54.1", features = ["rt-multi-thread", "macros", "net", "signal", "time"] }
+
+[dev-dependencies]
+proptest = "1.12.0"
+reqwest = { version = "0.13.5", features = ["json"] }
+serde = { version = "1.0.229", features = ["derive"] }
+toml = "1.2.1"
